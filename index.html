@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>教師あり学習マップ</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- コードの色付け（highlight.js） -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+
+<header class="page-header">
+  <p class="eyebrow">第II部　教師あり学習の総合演習</p>
+  <h1>教師あり学習の全体像</h1>
+  <p class="lead">🦅 <strong>鳥の目</strong>で流れをつかみ、気になる箱をタップして 🐛 <strong>虫の目</strong>（コードの書き方）に潜る。<br>
+    <span class="ch">5</span> などの数字は、そのトピックが出てくる章番号です。</p>
+</header>
+
+<!-- ================================================================
+     🦅 鳥の目：全体像
+     各箱は <a href="#ID"> になっていて、下の「虫の目」の
+     <article id="ID"> とつながっています。
+     ================================================================ -->
+<main class="map">
+
+  <!-- 左：全体の流れ -->
+  <section class="flow" aria-label="全体の流れ">
+    <div class="terminal"><span class="dot"></span>開始</div>
+    <div class="arrow-down"></div>
+    <a class="node dark" href="#purpose">目的の明確化</a>
+    <div class="arrow-down"></div>
+    <a class="node dark" href="#collect">データ収集</a>
+    <div class="arrow-down"></div>
+
+    <div class="ml-block">
+      <p class="ml-title">機械学習によるデータ分析</p>
+      <div class="ml-grid">
+        <div class="ml-side">
+          <a class="node light" href="#dummy">ダミー変数化<small>（カテゴリ特徴量列）</small><span class="chs"><span class="ch">7</span></span></a>
+          <div class="arrow-down"></div>
+          <a class="node light" href="#test-split">テストデータの分離<span class="chs"><span class="ch">8</span></span></a>
+          <p class="side-note">→ 前処理へ</p>
+        </div>
+        <div class="ml-main">
+          <a class="node main step-pre" href="#preprocess">前処理</a>
+          <div class="arrow-fat"></div>
+          <a class="node main step-learn" href="#learn">学習</a>
+          <div class="arrow-fat"></div>
+          <a class="node main step-eval" href="#evaluate">評価</a>
+          <p class="loop-note">↺ NGなら前処理へ戻る</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="arrow-down"></div>
+    <div class="terminal"><span class="dot"></span>終了</div>
+  </section>
+
+  <!-- 右：前処理・学習・評価の中身 -->
+  <section class="panels" aria-label="各ステップの中身">
+
+    <fieldset class="panel panel-pre">
+      <legend>前処理</legend>
+      <a class="node" href="#missing">欠損値処理<small>（行削除・全体代表値埋め・グループ代表値埋め）</small><span class="chs"><span class="ch">7</span></span></a>
+      <div class="optional">
+        <p class="optional-title">各手法を必要に応じて実施</p>
+        <div class="optional-grid">
+          <a class="node" href="#outlier">外れ値の除外<span class="chs"><span class="ch">6</span></span></a>
+          <a class="node" href="#feature-select">特徴量の絞り込み<span class="chs"><span class="ch">8</span></span></a>
+          <a class="node" href="#standardize">標準化<span class="chs"><span class="ch">8</span></span></a>
+          <a class="node" href="#poly">多項式特徴量・交互作用特徴量の追加<span class="chs"><span class="ch">8</span></span></a>
+        </div>
+      </div>
+      <a class="node" href="#split-xt">特徴量xと正解tに分割</a>
+      <a class="node" href="#split-train-val">教師データの分割<span class="chs"><span class="ch">5</span></span></a>
+    </fieldset>
+
+    <fieldset class="panel panel-learn">
+      <legend>学習</legend>
+      <a class="node" href="#model">未学習状態モデルの生成<small>（分類なら決定木、回帰なら線形回帰）</small><span class="chs"><span class="ch">5</span><span class="ch">6</span></span></a>
+      <a class="node" href="#fit">訓練データで学習<small>（必要に応じて不均衡データ補正）</small><span class="chs"><span class="ch">7</span></span></a>
+    </fieldset>
+
+    <fieldset class="panel panel-eval">
+      <legend>評価</legend>
+      <a class="node" href="#validate">検証データで評価し指標確認<small>（分類なら正解率、回帰なら決定係数）</small><span class="chs"><span class="ch">5</span><span class="ch">6</span></span></a>
+      <div class="branch">
+        <div class="branch-col">
+          <p class="branch-label ng">↓ NG</p>
+          <a class="node" href="#improve">改善案検討<small>前処理に戻る</small><span class="chs"><span class="ch">5</span></span></a>
+        </div>
+        <div class="branch-col">
+          <p class="branch-label ok">↓ OK</p>
+          <a class="node" href="#final">最終性能評価<small>（テストデータで評価）</small><span class="chs"><span class="ch">8</span></span></a>
+        </div>
+      </div>
+    </fieldset>
+
+  </section>
+</main>
+
+<!-- 詳細を表示するポップアップ（中身は script.js が下の article から差し込む） -->
+<dialog id="detail" aria-labelledby="detail-title">
+  <div class="detail-head">
+    <h2 id="detail-title"></h2>
+    <button class="close" type="button" aria-label="閉じる">×</button>
+  </div>
+  <div class="detail-body"></div>
+</dialog>
+
+
+<!-- ================================================================
+     🐛 虫の目：各トピックの詳細
+     ここに自分でメモやコードを書き足していきます。
+
+     【書き方のルール】
+       <article id="鳥の目のhrefと同じID" data-title="ポップアップの見出し" hidden>
+         <h3>ポイント</h3>  …説明
+         <h3>コード</h3>    …<pre><code class="language-python">ここにコード</code></pre>
+         <h3>メモ</h3>      …自分の気づき
+       </article>
+
+     【注意】コードの中に < > & を書くときは
+       &lt;  &gt;  &amp;  に置き換えてください（HTMLのタグと区別するため）。
+     ================================================================ -->
+<div class="details">
+
+  <!-- ---------- 全体の流れ ---------- -->
+
+  <article id="purpose" data-title="目的の明確化" hidden>
+    <h3>ポイント</h3>
+    <ul>
+      <li>何を予測したいのか（＝正解データ t は何か）を決める</li>
+      <li>予測したいものがカテゴリなら <b>分類</b>、数値なら <b>回帰</b></li>
+      <li>どのくらいの性能なら「使える」と言えるか、目標の数値も決めておく</li>
+    </ul>
+    <h3>メモ</h3>
+    <p class="todo">（ここに自分のメモを書く）</p>
+  </article>
+
+  <article id="collect" data-title="データ収集" hidden>
+    <h3>ポイント</h3>
+    <p>CSVを読み込んで、まずは形と中身を確認する。</p>
+    <h3>コード</h3>
+<pre><code class="language-python">import pandas as pd
+
+df = pd.read_csv('data.csv')
+
+df.head(3)                    # 先頭3行を確認
+df.shape                      # (行数, 列数)
+df['target'].value_counts()   # 正解ラベルの件数（分類のとき）</code></pre>
+    <h3>メモ</h3>
+    <p class="todo">（ここに自分のメモを書く）</p>
+  </article>
+
+  <article id="dummy" data-title="ダミー変数化" data-chapter="7" hidden>
+    <h3>ポイント</h3>
+    <p>文字列のカテゴリ列（例：性別）は、モデルが計算できるように 0/1 の列に変換する。</p>
+    <h3>コード</h3>
+<pre><code class="language-python">dummy = pd.get_dummies(df['sex'], drop_first=True)
+
+# 元の列を消して、ダミー列をくっつける
+df = pd.concat([df.drop('sex', axis=1), dummy], axis=1)</code></pre>
+    <h3>メモ</h3>
+    <p class="todo">（drop_first=True にする理由を自分の言葉で書いてみる）</p>
+  </article>
+
+  <article id="test-split" data-title="テストデータの分離" data-chapter="8" hidden>
+    <h3>ポイント</h3>
+    <p>最終評価用のテストデータは <b>前処理の前に</b> 取り分けて、最後まで触らない。</p>
+    <h3>コード</h3>
+<pre><code class="language-python">from sklearn.model_selection import train_test_split
+
+train_val, test = train_test_split(df, test_size=0.2, random_state=0)</code></pre>
+    <h3>メモ</h3>
+    <p class="todo">（ここに自分のメモを書く）</p>
+  </article>
+
+  <article id="preprocess" data-title="前処理（全体）" hidden>
+    <h3>ポイント</h3>
+    <p>モデルが学習しやすい形にデータを整える工程。主な流れは次のとおり。</p>
+    <ol>
+      <li><a href="#missing">欠損値処理</a></li>
+      <li>必要に応じて <a href="#outlier">外れ値の除外</a> / <a href="#feature-select">特徴量の絞り込み</a> / <a href="#standardize">標準化</a> / <a href="#poly">特徴量の追加</a></li>
+      <li><a href="#split-xt">特徴量xと正解tに分割</a></li>
+      <li><a href="#split-train-val">教師データの分割</a></li>
+    </ol>
+  </article>
+
+  <article id="learn" data-title="学習（全体）" hidden>
+    <h3>ポイント</h3>
+    <ol>
+      <li><a href="#model">未学習状態モデルの生成</a></li>
+      <li><a href="#fit">訓練データで学習</a></li>
+    </ol>
+  </article>
+
+  <article id="evaluate" data-title="評価（全体）" hidden>
+    <h3>ポイント</h3>
+    <ol>
+      <li><a href="#validate">検証データで評価し指標確認</a></li>
+      <li>NG → <a href="#improve">改善案検討</a>して前処理に戻る</li>
+      <li>OK → <a href="#final">最終性能評価</a></li>
+    </ol>
+  </article>
+
+  <!-- ---------- 前処理 ---------- -->
+
+  <article id="missing" data-title="欠損値処理" data-chapter="7" hidden>
+    <h3>ポイント</h3>
+    <p>欠損値（NaN）があるとモデルは学習できない。消すか、何かで埋める。</p>
+    <h3>コード</h3>
+<pre><code class="language-python"># 列ごとの欠損値の数
+df.isnull().sum()
+
+# ① 行削除
+df2 = df.dropna()
+
+# ② 全体の代表値（平均値）で埋める
+df['age'] = df['age'].fillna(df['age'].mean())
+
+# ③ グループごとの代表値で埋める
+group_mean = df.groupby('pclass')['age'].transform('mean')
+df['age'] = df['age'].fillna(group_mean)</code></pre>
+    <h3>メモ</h3>
+    <p class="todo">（平均値と中央値、どちらで埋めるかの判断基準など）</p>
+  </article>
+
+  <article id="outlier" data-title="外れ値の除外" data-chapter="6" hidden>
+    <h3>ポイント</h3>
+    <p>散布図で確認し、極端に外れたデータを取り除く。</p>
+    <h3>コード</h3>
+<pre><code class="language-python">df.plot(kind='scatter', x='x1', y='target')
+
+# 条件に合う行の index を取って削除
+no = df[(df['x1'] &gt; 10) &amp; (df['target'] &lt; 5)].index
+df = df.drop(no, axis=0)</code></pre>
+    <h3>メモ</h3>
+    <p class="todo">（ここに自分のメモを書く）</p>
+  </article>
+
+  <article id="feature-select" data-title="特徴量の絞り込み" data-chapter="8" hidden>
+    <h3>ポイント</h3>
+    <p>正解との相関が高い列を中心に、使う特徴量を選ぶ。</p>
+    <h3>コード</h3>
+<pre><code class="language-python">corr = df.corr(numeric_only=True)['target']
+corr.abs().sort_values(ascending=False)
+
+cols = ['x1', 'x3']   # 使う列を選ぶ</code></pre>
+    <h3>メモ</h3>
+    <p class="todo">（ここに自分のメモを書く）</p>
+  </article>
+
+  <article id="standardize" data-title="標準化" data-chapter="8" hidden>
+    <h3>ポイント</h3>
+    <p>列ごとの単位や大きさをそろえる（平均0・標準偏差1）。<b>fit は訓練データだけ</b>で行う。</p>
+    <h3>コード</h3>
+<pre><code class="language-python">from sklearn.preprocessing import StandardScaler
+
+sc = StandardScaler()
+x_train_sc = sc.fit_transform(x_train)   # 訓練データで fit + 変換
+x_val_sc   = sc.transform(x_val)         # 検証・テストは transform だけ</code></pre>
+    <h3>メモ</h3>
+    <p class="todo">（検証データで fit してはいけない理由を書く）</p>
+  </article>
+
+  <article id="poly" data-title="多項式特徴量・交互作用特徴量の追加" data-chapter="8" hidden>
+    <h3>ポイント</h3>
+    <p>2乗した列や、列どうしを掛けた列を足して、曲線的な関係も表せるようにする。</p>
+    <h3>コード</h3>
+<pre><code class="language-python"># 手で作る
+x['x1_2']  = x['x1'] ** 2          # 多項式特徴量
+x['x1_x2'] = x['x1'] * x['x2']     # 交互作用特徴量
+
+# まとめて作る
+from sklearn.preprocessing import PolynomialFeatures
+pf = PolynomialFeatures(degree=2, include_bias=False)
+x_poly = pf.fit_transform(x)</code></pre>
+    <h3>メモ</h3>
+    <p class="todo">（ここに自分のメモを書く）</p>
+  </article>
+
+  <article id="split-xt" data-title="特徴量xと正解tに分割" hidden>
+    <h3>コード</h3>
+<pre><code class="language-python">cols = ['x1', 'x2', 'x3']
+x = df[cols]          # 特徴量（問題）
+t = df['target']      # 正解（答え）</code></pre>
+    <h3>メモ</h3>
+    <p class="todo">（ここに自分のメモを書く）</p>
+  </article>
+
+  <article id="split-train-val" data-title="教師データの分割" data-chapter="5" hidden>
+    <h3>ポイント</h3>
+    <p>学習用（訓練データ）と、性能チェック用（検証データ）に分ける。</p>
+    <h3>コード</h3>
+<pre><code class="language-python">from sklearn.model_selection import train_test_split
+
+x_train, x_val, y_train, y_val = train_test_split(
+    x, t, test_size=0.2, random_state=0)</code></pre>
+    <h3>メモ</h3>
+    <p class="todo">（random_state を固定する理由など）</p>
+  </article>
+
+  <!-- ---------- 学習 ---------- -->
+
+  <article id="model" data-title="未学習状態モデルの生成" data-chapter="5, 6" hidden>
+    <h3>ポイント</h3>
+    <p>分類なら決定木、回帰なら線形回帰。</p>
+    <h3>コード</h3>
+<pre><code class="language-python"># 分類：決定木
+from sklearn import tree
+model = tree.DecisionTreeClassifier(max_depth=3, random_state=0)
+
+# 回帰：線形回帰
+from sklearn.linear_model import LinearRegression
+model = LinearRegression()</code></pre>
+    <h3>メモ</h3>
+    <p class="todo">（max_depth を大きくするとどうなるか）</p>
+  </article>
+
+  <article id="fit" data-title="訓練データで学習" data-chapter="7" hidden>
+    <h3>ポイント</h3>
+    <p>正解ラベルの数が偏っている（不均衡データ）ときは <code>class_weight='balanced'</code> で補正する。</p>
+    <h3>コード</h3>
+<pre><code class="language-python">model.fit(x_train, y_train)
+
+# 不均衡データの補正（決定木の場合）
+model = tree.DecisionTreeClassifier(
+    max_depth=3, random_state=0, class_weight='balanced')
+model.fit(x_train, y_train)</code></pre>
+    <h3>メモ</h3>
+    <p class="todo">（ここに自分のメモを書く）</p>
+  </article>
+
+  <!-- ---------- 評価 ---------- -->
+
+  <article id="validate" data-title="検証データで評価し指標確認" data-chapter="5, 6" hidden>
+    <h3>ポイント</h3>
+    <p><code>score</code> は分類なら正解率、回帰なら決定係数を返す。訓練データとの差が大きいなら過学習を疑う。</p>
+    <h3>コード</h3>
+<pre><code class="language-python">model.score(x_val, y_val)       # 検証データでの性能
+model.score(x_train, y_train)   # 訓練データでの性能（比較用）</code></pre>
+    <h3>メモ</h3>
+    <p class="todo">（ここに自分のメモを書く）</p>
+  </article>
+
+  <article id="improve" data-title="改善案検討（前処理に戻る）" data-chapter="5" hidden>
+    <h3>ポイント</h3>
+    <ul>
+      <li>欠損値の埋め方を変える</li>
+      <li>特徴量を増やす・減らす</li>
+      <li>モデルのパラメータ（max_depth など）を変える</li>
+    </ul>
+    <h3>メモ</h3>
+    <p class="todo">（試したことと結果を記録する）</p>
+  </article>
+
+  <article id="final" data-title="最終性能評価（テストデータで評価）" data-chapter="8" hidden>
+    <h3>ポイント</h3>
+    <p>最初に取り分けたテストデータにも、訓練データと同じ前処理をしてから評価する。</p>
+    <h3>コード</h3>
+<pre><code class="language-python">x_test = test[cols]
+y_test = test['target']
+
+model.score(x_test, y_test)</code></pre>
+    <h3>メモ</h3>
+    <p class="todo">（ここに自分のメモを書く）</p>
+  </article>
+
+</div>
+
+</body>
+</html>

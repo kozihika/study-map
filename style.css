@@ -1,0 +1,304 @@
+/* ===== 色やサイズの設定（ここを変えると全体が変わる） ===== */
+:root {
+  --navy: #2b3f86;       /* 前処理・学習・評価の濃い青 */
+  --blue: #4a6fc4;       /* 右側パネルの箱の青 */
+  --light: #5b7fd0;      /* ダミー変数化などの箱 */
+  --dark: #3a3a3a;       /* 目的の明確化・データ収集 */
+  --area: #e4e8f5;       /* 機械学習ブロックの背景 */
+  --bg: #f7f7f4;
+  --text: #222;
+  --muted: #666;
+  --radius: 10px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 24px 16px 48px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Hiragino Sans", "Noto Sans JP", "Yu Gothic", sans-serif;
+  line-height: 1.6;
+}
+
+/* ===== ヘッダー ===== */
+.page-header {
+  max-width: 1200px;
+  margin: 0 auto 24px;
+}
+.eyebrow { margin: 0; color: var(--muted); font-size: 0.85rem; }
+h1 { margin: 4px 0 8px; color: var(--navy); font-size: 1.8rem; }
+.lead { margin: 0; color: var(--muted); }
+
+/* ===== 全体のレイアウト：左に流れ、右に中身 ===== */
+.map {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: 32px;
+  align-items: start;
+}
+
+/* ===== 箱（クリックできる部分） ===== */
+.node {
+  position: relative;
+  display: block;
+  padding: 12px 14px;
+  border-radius: 4px;
+  background: var(--blue);
+  color: #fff;
+  text-align: center;
+  text-decoration: none;
+  font-weight: 600;
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+.node:hover, .node:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(43, 63, 134, 0.35);
+  outline: none;
+}
+.node small {
+  display: block;
+  font-weight: 400;
+  font-size: 0.8rem;
+  opacity: 0.9;
+}
+.node.dark  { background: var(--dark); }
+.node.light { background: var(--light); }
+.node.main  { background: var(--navy); font-size: 1.4rem; padding: 18px; }
+
+/* 章番号のバッジ */
+.chs {
+  position: absolute;
+  top: -10px;
+  right: -6px;
+  display: flex;
+  gap: 4px;
+}
+.ch {
+  display: inline-block;
+  min-width: 1.4em;
+  padding: 0 4px;
+  border-radius: 4px;
+  background: #1f2b5c;
+  color: #fff;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* ===== 左：全体の流れ ===== */
+.flow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.flow > .node { width: min(100%, 220px); }
+
+.terminal {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+}
+.dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #111;
+}
+.arrow-down {
+  width: 2px;
+  height: 28px;
+  margin: 2px 0 6px;
+  background: #333;
+  position: relative;
+}
+.arrow-down::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: -5px;
+  border: 6px solid transparent;
+  border-top: 7px solid #333;
+  border-bottom: 0;
+}
+.arrow-fat {
+  width: 0;
+  height: 0;
+  margin: 8px auto;
+  border-left: 22px solid transparent;
+  border-right: 22px solid transparent;
+  border-top: 18px solid #b9c3e4;
+}
+
+/* 機械学習によるデータ分析のブロック */
+.ml-block {
+  width: 100%;
+  padding: 16px;
+  background: var(--area);
+  border: 1px solid #b9c3e4;
+  border-radius: var(--radius);
+}
+.ml-title {
+  margin: 0 0 16px;
+  font-weight: 700;
+  text-align: right;
+}
+.ml-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 20px;
+}
+.ml-side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.ml-side .node { width: 100%; }
+.side-note, .loop-note {
+  margin: 8px 0 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* ===== 右：各ステップの中身 ===== */
+.panels {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.panel {
+  margin: 0;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: #fff;
+  border: 2px solid #333;
+  border-radius: 16px;
+  transition: box-shadow 0.15s, border-color 0.15s;
+}
+.panel legend {
+  padding: 0 8px;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.optional {
+  padding: 12px;
+  background: var(--area);
+  border-radius: 8px;
+}
+.optional-title {
+  margin: 0 0 10px;
+  font-weight: 700;
+  text-align: center;
+}
+.optional-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 12px;
+}
+.optional .node { font-size: 0.9rem; padding: 8px 10px; }
+
+.branch {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.branch-label {
+  margin: 0 0 6px;
+  font-weight: 700;
+  text-align: center;
+}
+.branch-label.ng { color: #b23a3a; }
+.branch-label.ok { color: #2e7d4f; }
+
+/* 左の「前処理/学習/評価」にマウスを乗せると、右の対応するパネルが光る */
+.map:has(.step-pre:hover)   .panel-pre,
+.map:has(.step-learn:hover) .panel-learn,
+.map:has(.step-eval:hover)  .panel-eval {
+  border-color: var(--navy);
+  box-shadow: 0 0 0 4px rgba(74, 111, 196, 0.3);
+}
+
+/* ===== 虫の目：詳細のポップアップ ===== */
+dialog {
+  width: min(720px, calc(100% - 32px));
+  max-height: 85vh;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+dialog::backdrop { background: rgba(20, 30, 60, 0.45); }
+
+.detail-head {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 20px;
+  background: var(--navy);
+  color: #fff;
+}
+.detail-head h2 { margin: 0; font-size: 1.2rem; }
+.close {
+  border: none;
+  background: transparent;
+  color: #fff;
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.detail-body { padding: 4px 20px 20px; }
+.detail-body h3 {
+  margin: 20px 0 8px;
+  padding-left: 8px;
+  border-left: 4px solid var(--blue);
+  font-size: 1rem;
+}
+.detail-body pre {
+  margin: 0;
+  overflow-x: auto;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+.detail-body pre code {
+  display: block;
+  padding: 12px 14px;
+  font-size: 0.9rem;
+}
+.detail-body :not(pre) > code {
+  padding: 1px 5px;
+  background: #eef1f8;
+  border-radius: 4px;
+}
+.detail-body a { color: var(--blue); }
+.todo { color: #999; font-style: italic; }
+
+/* 章番号の表示（data-chapter から自動で作られる） */
+.chapter-tag {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 2px 8px;
+  background: #eef1f8;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  color: var(--navy);
+}
+
+/* ===== スマホなど狭い画面では縦に並べる ===== */
+@media (max-width: 860px) {
+  .map { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  .ml-grid { grid-template-columns: 1fr; }
+  .node.main { font-size: 1.2rem; }
+}
